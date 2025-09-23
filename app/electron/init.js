@@ -1,9 +1,10 @@
 'use strict';
-
+const os = require('os');
 const path = require('path');
 const { app } = require('electron');
 app.setName('Achievement Watcher');
 app.setPath('userData', path.join(app.getPath('appData'), app.getName()));
+process.env['APPDATA'] = path.join(os.homedir(), 'Library', 'Application Support');
 const { BrowserFetcher } = require('puppeteer');
 const CHROMIUM_REVISION = '1108766';
 const puppeteerCore = require('puppeteer');
@@ -1406,6 +1407,7 @@ async function createNotificationWindow(info) {
         ? path.join(process.env.SystemRoot || process.env.WINDIR, 'media', toastAudio.getDefault())
         : toastAudio.getCustom();
   }
+
   notificationWindow.webContents.on('did-finish-load', () => {
     notificationWindow.showInactive();
     notificationWindow.webContents.send('set-window-scale', scale);
@@ -1417,7 +1419,7 @@ async function createNotificationWindow(info) {
       scale,
     });
     createOverlayWindow({ appid: info.appid, action: 'refresh' });
-    player.play(soundFile);
+    //player.play(soundFile);
   });
 
   notificationWindow.on('closed', async () => {
